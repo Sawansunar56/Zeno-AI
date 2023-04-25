@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/colors.dart';
+import 'package:frontend/constants/router_constants.dart';
+import 'package:go_router/go_router.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class StartPage extends StatelessWidget {
@@ -117,7 +119,10 @@ class StartPage extends StatelessWidget {
                                   ),
                                 ),
                                 ElevatedButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    GoRouter.of(context)
+                                        .replaceNamed(RouterConstants.homePage);
+                                  },
                                   child: Icon(Icons.arrow_forward),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: primaryColor,
