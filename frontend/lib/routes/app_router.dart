@@ -10,21 +10,21 @@ class AppRouter {
     routes: [
       GoRoute(
         name: RouterConstants.startPage,
-        path: '/home',
+        path: '/start',
         pageBuilder: (context, state) {
           return MaterialPage(child: StartPage());
         },
       ),
       GoRoute(
         name: RouterConstants.homePage,
-        path: '/start',
+        path: '/',
         pageBuilder: (context, state) {
           return MaterialPage(child: MyHomePage());
         },
       ),
       GoRoute(
         name: RouterConstants.chatPage,
-        path: '/',
+        path: '/chat',
         pageBuilder: (context, state) {
           return MaterialPage(child: ChatPage());
         },

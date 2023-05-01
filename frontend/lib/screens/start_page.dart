@@ -12,7 +12,8 @@ class StartPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(color: Color.fromARGB(255, 109, 177, 255)),
+        decoration:
+            const BoxDecoration(color: Color.fromARGB(255, 109, 177, 255)),
         child: SafeArea(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -112,7 +113,7 @@ class StartPage extends StatelessWidget {
                                   count: 3,
                                   axisDirection: Axis.horizontal,
                                   effect: SlideEffect(
-                                    activeDotColor: primaryColor,
+                                    activeDotColor: primaryBlue,
                                     dotHeight: 10,
                                     dotColor: Colors.black26,
                                     dotWidth: 10,
@@ -125,7 +126,7 @@ class StartPage extends StatelessWidget {
                                   },
                                   child: Icon(Icons.arrow_forward),
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: primaryColor,
+                                    backgroundColor: primaryBlue,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10.0),
                                     ),
