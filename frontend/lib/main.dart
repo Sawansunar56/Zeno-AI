@@ -16,8 +16,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         fontFamily: 'Poppins',
-        primarySwatch: Colors.blue,
-        scaffoldBackgroundColor: white,
+        scaffoldBackgroundColor: Colors.white,
       ),
       routeInformationParser: _router.router.routeInformationParser,
       routerDelegate: _router.router.routerDelegate,

@@ -1,7 +1,8 @@
 import 'package:frontend/constants/router_constants.dart';
-import 'package:frontend/screens/chat_page.dart';
 import 'package:frontend/screens/home_page.dart';
 import 'package:frontend/screens/start_page.dart';
+import 'package:frontend/screens/text_speech.dart';
+import 'package:frontend/screens/version_page.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 
@@ -23,10 +24,17 @@ class AppRouter {
         },
       ),
       GoRoute(
-        name: RouterConstants.chatPage,
-        path: '/chat',
+        name: 'textspeec',
+        path: '/text',
         pageBuilder: (context, state) {
-          return MaterialPage(child: ChatPage());
+          return MaterialPage(child: TextSpeech());
+        },
+      ),
+      GoRoute(
+        name: RouterConstants.versionPage,
+        path: '/version',
+        pageBuilder: (context, state) {
+          return MaterialPage(child: VersionPage());
         },
       )
     ],

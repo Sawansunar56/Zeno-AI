@@ -45,6 +45,9 @@ dependencies:
   just_audio: ^0.9.32
   percent_indicator: ^4.2.3
   audioplayers: ^4.0.1
+  speech_to_text: ^6.1.1
+  sqflite: ^2.2.8+4
+  path: ^1.8.3
 
 dev_dependencies:
   flutter_test:
