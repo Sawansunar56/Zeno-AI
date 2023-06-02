@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/router_constants.dart';
+import 'package:frontend/screens/chat_list_screen.dart';
 import 'package:frontend/screens/chat_page.dart';
 
 import 'package:go_router/go_router.dart';
@@ -12,6 +13,14 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  int selectedOption = 0;
+
+  void updateSelectedOption(int option) {
+    setState(() {
+      selectedOption = option;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,19 +32,23 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Column(children: [
               Text(
                 "History",
-                style: TextStyle(fontSize: 20),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               Expanded(
-                child: Text("hellow"),
+                child: ChatlistScreen(
+                  onOptionSelected: updateSelectedOption,
+                ),
               ),
-              ElevatedButton(onPressed: () {}, child: Text("Add")),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Icon(Icons.ac_unit),
-                  Icon(Icons.ac_unit),
-                  Icon(Icons.ac_unit),
-                ],
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Icon(Icons.ac_unit),
+                    Icon(Icons.ac_unit),
+                    Icon(Icons.ac_unit),
+                  ],
+                ),
               )
             ]),
           ),
@@ -56,7 +69,10 @@ class _MyHomePageState extends State<MyHomePage> {
           )
         ],
       ),
-      body: ChatPage(),
+      // body: Text(selectedOption),
+      body: ChatPage(
+        conversationId: selectedOption,
+      ),
       // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       // floatingActionButton: FloatingActionButton(
       //   onPressed: toggleRecording,

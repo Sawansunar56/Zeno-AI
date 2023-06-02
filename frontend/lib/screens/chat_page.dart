@@ -5,10 +5,10 @@ import 'package:frontend/screens/overlay_screen.dart';
 import 'package:frontend/widgets/received_message.dart';
 import 'package:frontend/widgets/send_message.dart';
 import 'package:frontend/services/database_helper.dart';
-import 'package:frontend/services/speech_api.dart';
 
 class ChatPage extends StatefulWidget {
-  const ChatPage({super.key});
+  int conversationId;
+  ChatPage({super.key, required this.conversationId});
 
   @override
   State<ChatPage> createState() => _ChatPageState();
@@ -55,7 +55,8 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Future<List<Message>> _loadMessages() async {
-    final messages = await DatabaseHelper.instance.getMessages();
+    final messages =
+        await DatabaseHelper.instance.getMessages(widget.conversationId);
     return messages;
   }
 
@@ -66,7 +67,7 @@ class _ChatPageState extends State<ChatPage> {
       content: content,
       sender: sender,
       timestamp: timestamp,
-      // conversationId: widget.conversationId,
+      conversationId: widget.conversationId,
     );
     await DatabaseHelper.instance.insertMessage(message);
     _listenForMessages();
@@ -152,6 +153,7 @@ class _ChatPageState extends State<ChatPage> {
                     _sendMessage(content, sender);
                   }
                   _messageController.clear();
+                  print(widget.conversationId);
                 },
                 child: Icon(Icons.send_sharp),
               )
