@@ -1,8 +1,9 @@
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/colors.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 
-import '../services/speech_api.dart';
+// import '../services/speech_api.dart';
 
 class OverlayScreen extends StatefulWidget {
   OverlayScreen({super.key});
@@ -12,38 +13,34 @@ class OverlayScreen extends StatefulWidget {
 }
 
 class _OverlayScreenState extends State<OverlayScreen> {
+  final _speech = SpeechToText();
   bool isListening = false;
   String text = "";
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   resetState();
-  // }
+  void _listen() async {
+    if (!isListening) {
+      bool available = await _speech.initialize(
+        onStatus: (val) => print("onStatus: $val"),
+        onError: (val) => print("onError: $val"),
+      );
 
-  @override
-  void dispose() {
-    resetState();
-    super.dispose();
-  }
-
-  void resetState() {
-    setState(() {
-      isListening = false;
-      text = "";
-    });
-  }
-
-  Future toggleRecording() => SpeechApi.toggleRecording(
-      onResult: (text) => setState(() => this.text = text),
-      onListening: (isListening) {
-        print(this.isListening);
+      if (available) {
         setState(() {
-          print("ongoing");
-          this.isListening = isListening;
+          isListening = true;
+          _speech.listen(
+            onResult: (val) => setState(() {
+              text = val.recognizedWords;
+            }),
+          );
         });
-        print(this.isListening);
+      }
+    } else {
+      setState(() {
+        isListening = false;
+        _speech.stop();
       });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +72,7 @@ class _OverlayScreenState extends State<OverlayScreen> {
               onPressed: () {
                 // print(isListening);
                 // print(text);
-                toggleRecording();
+                _listen();
               },
               child: Icon(
                 isListening ? Icons.mic_none : Icons.mic,

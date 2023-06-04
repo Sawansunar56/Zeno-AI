@@ -40,6 +40,8 @@ class DatabaseHelper {
         conversationId INTEGER
         )
     ''');
+
+    insertConversation(Conversation(id: 0, conversationText: "Default"));
     //   conversationId INTEGER,
     //   FOREIGN KEY (conversationId) REFERENCES conversations (id)
     // )
@@ -95,6 +97,15 @@ class DatabaseHelper {
       'messages',
       where: 'conversationId = ?',
       whereArgs: [conversationId],
+    );
+  }
+
+  Future<int> deleteMessages(int id) async {
+    final db = await database;
+    return await db.delete(
+      'messages',
+      where: 'id = ?',
+      whereArgs: [id],
     );
   }
 }

@@ -110,12 +110,14 @@ class _ChatlistScreenState extends State<ChatlistScreen> {
                       final conversation = _conversations[index];
                       return Card(
                         child: ListTile(
-                          trailing: IconButton(
-                            icon: Icon(Icons.close),
-                            onPressed: () {
-                              _deleteConversation(conversation.id);
-                            },
-                          ),
+                          trailing: conversation.conversationText != "Default"
+                              ? IconButton(
+                                  icon: Icon(Icons.close),
+                                  onPressed: () {
+                                    _deleteConversation(conversation.id);
+                                  },
+                                )
+                              : Text(""),
                           title: Text(
                             conversation.conversationText,
                             style: TextStyle(

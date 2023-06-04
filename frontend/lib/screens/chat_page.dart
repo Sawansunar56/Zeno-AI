@@ -73,6 +73,87 @@ class _ChatPageState extends State<ChatPage> {
     _listenForMessages();
   }
 
+  _deleteMessage(int id) async {
+    await DatabaseHelper.instance.deleteMessages(id);
+    _listenForMessages();
+  }
+
+  // void _handleLongPress(BuildContext context, GlobalKey key, Message message) {
+  //   final RenderBox? renderBox =
+  //       key.currentContext?.findRenderObject() as RenderBox?;
+  //   final Offset? offset = renderBox?.localToGlobal(Offset.zero);
+
+  //   if (offset != null) {
+  //     _showDeleteOverlay(context, message.id, offset);
+  //   }
+  // }
+
+  // void _showDeleteOverlay(
+  //     BuildContext context, int messageId, Offset position) {
+  //   OverlayState? overlay = Overlay.of(context);
+  //   OverlayEntry? overlayEntry;
+
+  //   overlayEntry = OverlayEntry(builder: (context) {
+  //     return Positioned(
+  //       left: position.dx,
+  //       top: position.dy,
+  //       child: GestureDetector(
+  //         onTap: () {
+  //           _deleteMessage(messageId);
+  //           overlayEntry?.remove();
+  //         },
+  //         child: Container(
+  //           width: 120,
+  //           height: 80,
+  //           color: Colors.grey,
+  //           child: Row(
+  //             mainAxisAlignment: MainAxisAlignment.center,
+  //             children: [
+  //               Text('Delete'),
+  //             ],
+  //           ),
+  //         ),
+  //       ),
+  //     );
+  //   });
+
+  //   overlay?.insert(overlayEntry);
+  // }
+
+  void _showDeleteConfirmationDialog(BuildContext context, Message message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+          title: Text('Delete Message'),
+          content: Text('Are you sure you want to delete this message?'),
+          actions: [
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+            TextButton(
+              child: Text('Delete'),
+              onPressed: () {
+                // Handle delete action
+                _deleteMessage(message.id);
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _handleLongPress(BuildContext context, Message message) {
+    _showDeleteConfirmationDialog(context, message);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -88,11 +169,17 @@ class _ChatPageState extends State<ChatPage> {
                   itemCount: messages.length,
                   itemBuilder: (context, index) {
                     final message = messages[index];
-                    return message.sender == "me"
-                        ? SentMessage(
-                            message: message.content,
-                          )
-                        : ReceivedMessage(message: message.content);
+                    return GestureDetector(
+                        onLongPress: () {
+                          _handleLongPress(context, message);
+                        },
+                        child: message.sender == "me"
+                            ? SentMessage(
+                                message: message.content,
+                              )
+                            : ReceivedMessage(
+                                message: message.content,
+                              ));
                     // return ListTile(
                     //   title: Text(message.content),
                     //   subtitle: Text(message.sender),
@@ -132,11 +219,8 @@ class _ChatPageState extends State<ChatPage> {
               SizedBox(width: 15),
               GestureDetector(
                 onTap: () async {
-                  var data = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              OverlayScreen(key: UniqueKey())));
+                  var data = await Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => OverlayScreen()));
 
                   if (data != null) {
                     _sendMessage(data, "me");
