@@ -6,4 +6,4 @@ const Color white = Color(0xfffffffff);
 const Color backgroundColor = Color.fromARGB(255, 101, 115, 155);
 const Color lighterBlack = Color(0xfff848caa);
 
-Color chatColor = Colors.red.shade400;
+Color primaryColor = Colors.red.shade400;

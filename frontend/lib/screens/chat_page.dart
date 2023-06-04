@@ -132,14 +132,16 @@ class _ChatPageState extends State<ChatPage> {
               SizedBox(width: 15),
               GestureDetector(
                 onTap: () async {
-                  final data = await Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => OverlayScreen()));
+                  var data = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              OverlayScreen(key: UniqueKey())));
 
                   if (data != null) {
                     _sendMessage(data, "me");
                     print(data);
                   }
-                  print("Mic1");
                 },
                 // child: Icon(isListening ? Icons.mic : Icons.mic_none, size: 36),
                 child: Icon(Icons.mic),

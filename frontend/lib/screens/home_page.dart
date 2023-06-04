@@ -13,11 +13,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int selectedOption = 0;
+  int selectedOption = 1;
 
   void updateSelectedOption(int option) {
     setState(() {
       selectedOption = option;
+      print(option);
     });
   }
 
@@ -71,6 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       // body: Text(selectedOption),
       body: ChatPage(
+        key: ValueKey(selectedOption),
         conversationId: selectedOption,
       ),
       // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

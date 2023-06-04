@@ -18,7 +18,7 @@ class SentMessage extends StatelessWidget {
           child: Container(
             padding: EdgeInsets.all(14),
             decoration: BoxDecoration(
-              color: chatColor,
+              color: primaryColor,
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(18),
                 bottomLeft: Radius.circular(18),
@@ -32,7 +32,7 @@ class SentMessage extends StatelessWidget {
             ),
           ),
         ),
-        CustomPaint(painter: Triangle(chatColor)),
+        CustomPaint(painter: Triangle(primaryColor)),
       ],
     ));
 
