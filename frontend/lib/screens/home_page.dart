@@ -32,7 +32,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 const EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
             child: Column(children: [
               Text(
-                "History",
+                "New Chat",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               Expanded(

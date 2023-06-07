@@ -1,4 +1,7 @@
 import 'dart:async';
+import 'dart:convert';
+
+import 'package:http/http.dart' as holyhttp;
 
 import 'package:flutter/material.dart';
 import 'package:frontend/screens/overlay_screen.dart';
@@ -22,6 +25,8 @@ class _ChatPageState extends State<ChatPage> {
 
   final StreamController<List<Message>> _messageStreamController =
       StreamController<List<Message>>();
+
+  get http => null;
 
   @override
   void initState() {
@@ -60,6 +65,35 @@ class _ChatPageState extends State<ChatPage> {
     return messages;
   }
 
+  funcbabay(String content) async {
+    final response = await holyhttp.post(
+      Uri.parse('https://960f-14-139-209-82.ngrok-free.app/ai'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'msg': content,
+      }),
+    );
+
+    var responseData = json.decode(response.body);
+    _storeAi(responseData["zeno"], "Ai");
+    print(responseData);
+  }
+
+  Future<void> _storeAi(String content, String sender) async {
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
+    final message = Message(
+      id: 0, // Auto-incremented ID
+      content: content,
+      sender: sender,
+      timestamp: timestamp,
+      conversationId: widget.conversationId,
+    );
+    await DatabaseHelper.instance.insertMessage(message);
+    _listenForMessages();
+  }
+
   Future<void> _sendMessage(String content, String sender) async {
     final timestamp = DateTime.now().millisecondsSinceEpoch;
     final message = Message(
@@ -70,6 +104,7 @@ class _ChatPageState extends State<ChatPage> {
       conversationId: widget.conversationId,
     );
     await DatabaseHelper.instance.insertMessage(message);
+    await funcbabay(content);
     _listenForMessages();
   }
 
@@ -222,7 +257,7 @@ class _ChatPageState extends State<ChatPage> {
                   var data = await Navigator.push(context,
                       MaterialPageRoute(builder: (context) => OverlayScreen()));
 
-                  if (data != null) {
+                  if (data != null && data.trim() != "") {
                     _sendMessage(data, "me");
                     print(data);
                   }

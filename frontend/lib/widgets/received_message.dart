@@ -19,14 +19,14 @@ class ReceivedMessage extends StatelessWidget {
           alignment: Alignment.center,
           transform: Matrix4.rotationY(math.pi),
           child: CustomPaint(
-            painter: Triangle(Colors.black12),
+            painter: Triangle(Colors.black),
           ),
         ),
         Flexible(
           child: Container(
             padding: EdgeInsets.all(14),
             decoration: BoxDecoration(
-              color: Colors.black12,
+              color: Colors.black,
               borderRadius: BorderRadius.only(
                 topRight: Radius.circular(18),
                 bottomLeft: Radius.circular(18),

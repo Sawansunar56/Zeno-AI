@@ -16,19 +16,19 @@ class SentMessage extends StatelessWidget {
       children: [
         Flexible(
           child: Container(
-            padding: EdgeInsets.all(14),
+            padding: EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: primaryColor,
               borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(18),
-                bottomLeft: Radius.circular(18),
+                topLeft: Radius.circular(25),
+                bottomLeft: Radius.circular(25),
                 bottomRight: Radius.circular(18),
               ),
             ),
             child: Text(
               message,
               style: TextStyle(
-                  color: Colors.white, fontFamily: 'Monstserrat', fontSize: 14),
+                  color: Colors.white, fontFamily: 'Monstserrat', fontSize: 16),
             ),
           ),
         ),
