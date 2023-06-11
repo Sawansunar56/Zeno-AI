@@ -1,7 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/services.dart';
+import 'package:frontend/screens/example_typing.dart';
 import 'package:http/http.dart' as holyhttp;
+
+import 'package:flutter_tts/flutter_tts.dart';
 
 import 'package:flutter/material.dart';
 import 'package:frontend/screens/overlay_screen.dart';
@@ -18,8 +22,11 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
+  String readMessage = "I am Zeno";
   final _messageController = TextEditingController();
   // late List<Message> _messages;
+  bool waitingAi = false;
+  FlutterTts flutterTts = FlutterTts();
 
   final ScrollController _scrollController = ScrollController();
 
@@ -32,6 +39,24 @@ class _ChatPageState extends State<ChatPage> {
   void initState() {
     super.initState();
     _listenForMessages();
+    _scrollToBottom();
+    initSetting();
+  }
+
+  void initSetting() async {
+    await flutterTts.setVolume(1.0);
+    await flutterTts.setPitch(1.0);
+    await flutterTts.setSpeechRate(0.5);
+    await flutterTts.setLanguage("en-US");
+  }
+
+  void _speak() async {
+    initSetting();
+    await flutterTts.speak(readMessage);
+  }
+
+  void _stop() async {
+    await flutterTts.stop();
   }
 
   // Listening that changes the screen whenever there has been any change to the data.
@@ -67,7 +92,7 @@ class _ChatPageState extends State<ChatPage> {
 
   funcbabay(String content) async {
     final response = await holyhttp.post(
-      Uri.parse('https://960f-14-139-209-82.ngrok-free.app/ai'),
+      Uri.parse('https://375e-14-139-209-82.ngrok-free.app/ai'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -78,11 +103,16 @@ class _ChatPageState extends State<ChatPage> {
 
     var responseData = json.decode(response.body);
     _storeAi(responseData["zeno"], "Ai");
-    print(responseData);
+    _listenForMessages();
   }
 
   Future<void> _storeAi(String content, String sender) async {
     final timestamp = DateTime.now().millisecondsSinceEpoch;
+    setState(() {
+      waitingAi = false;
+      readMessage = content;
+    });
+    _scrollToBottom();
     final message = Message(
       id: 0, // Auto-incremented ID
       content: content,
@@ -96,6 +126,10 @@ class _ChatPageState extends State<ChatPage> {
 
   Future<void> _sendMessage(String content, String sender) async {
     final timestamp = DateTime.now().millisecondsSinceEpoch;
+    setState(() {
+      waitingAi = true;
+    });
+    _scrollToBottom();
     final message = Message(
       id: 0, // Auto-incremented ID
       content: content,
@@ -104,56 +138,14 @@ class _ChatPageState extends State<ChatPage> {
       conversationId: widget.conversationId,
     );
     await DatabaseHelper.instance.insertMessage(message);
-    await funcbabay(content);
     _listenForMessages();
+    await funcbabay(content);
   }
 
   _deleteMessage(int id) async {
     await DatabaseHelper.instance.deleteMessages(id);
     _listenForMessages();
   }
-
-  // void _handleLongPress(BuildContext context, GlobalKey key, Message message) {
-  //   final RenderBox? renderBox =
-  //       key.currentContext?.findRenderObject() as RenderBox?;
-  //   final Offset? offset = renderBox?.localToGlobal(Offset.zero);
-
-  //   if (offset != null) {
-  //     _showDeleteOverlay(context, message.id, offset);
-  //   }
-  // }
-
-  // void _showDeleteOverlay(
-  //     BuildContext context, int messageId, Offset position) {
-  //   OverlayState? overlay = Overlay.of(context);
-  //   OverlayEntry? overlayEntry;
-
-  //   overlayEntry = OverlayEntry(builder: (context) {
-  //     return Positioned(
-  //       left: position.dx,
-  //       top: position.dy,
-  //       child: GestureDetector(
-  //         onTap: () {
-  //           _deleteMessage(messageId);
-  //           overlayEntry?.remove();
-  //         },
-  //         child: Container(
-  //           width: 120,
-  //           height: 80,
-  //           color: Colors.grey,
-  //           child: Row(
-  //             mainAxisAlignment: MainAxisAlignment.center,
-  //             children: [
-  //               Text('Delete'),
-  //             ],
-  //           ),
-  //         ),
-  //       ),
-  //     );
-  //   });
-
-  //   overlay?.insert(overlayEntry);
-  // }
 
   void _showDeleteConfirmationDialog(BuildContext context, Message message) {
     showDialog(
@@ -166,9 +158,17 @@ class _ChatPageState extends State<ChatPage> {
           content: Text('Are you sure you want to delete this message?'),
           actions: [
             TextButton(
+              child: Text('Copy'),
+              onPressed: () async {
+                await Clipboard.setData(ClipboardData(text: message.content));
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+            TextButton(
               child: Text('Cancel'),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
+                _speak();
               },
             ),
             TextButton(
@@ -208,13 +208,17 @@ class _ChatPageState extends State<ChatPage> {
                         onLongPress: () {
                           _handleLongPress(context, message);
                         },
-                        child: message.sender == "me"
-                            ? SentMessage(
-                                message: message.content,
-                              )
-                            : ReceivedMessage(
-                                message: message.content,
-                              ));
+                        child: Column(
+                          children: [
+                            message.sender == "me"
+                                ? SentMessage(
+                                    message: message.content,
+                                  )
+                                : ReceivedMessage(
+                                    message: message.content,
+                                  ),
+                          ],
+                        ));
                     // return ListTile(
                     //   title: Text(message.content),
                     //   subtitle: Text(message.sender),
@@ -230,6 +234,12 @@ class _ChatPageState extends State<ChatPage> {
           ),
         ),
         // Text(this.text),
+        Align(
+          alignment: Alignment.bottomLeft,
+          child: TypingIndicator(
+            showIndicator: waitingAi,
+          ),
+        ),
         Padding(
           padding: const EdgeInsets.all(10.0),
           child: Row(
@@ -259,7 +269,6 @@ class _ChatPageState extends State<ChatPage> {
 
                   if (data != null && data.trim() != "") {
                     _sendMessage(data, "me");
-                    print(data);
                   }
                 },
                 // child: Icon(isListening ? Icons.mic : Icons.mic_none, size: 36),
@@ -270,11 +279,16 @@ class _ChatPageState extends State<ChatPage> {
                 onTap: () {
                   final content = _messageController.text;
                   final sender = 'me';
-                  if (content.trim() != "") {
-                    _sendMessage(content, sender);
+                  if (content.trimRight() != "") {
+                    if (content == "!read") {
+                      _speak();
+                    }
+                    if (content == "!stop") {
+                      _stop();
+                    }
+                    // _sendMessage(content, sender);
                   }
                   _messageController.clear();
-                  print(widget.conversationId);
                 },
                 child: Icon(Icons.send_sharp),
               )

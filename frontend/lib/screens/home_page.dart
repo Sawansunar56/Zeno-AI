@@ -66,7 +66,12 @@ class _MyHomePageState extends State<MyHomePage> {
             onTap: () {
               GoRouter.of(context).pushNamed(RouterConstants.versionPage);
             },
-            child: Icon(Icons.abc),
+            child: Padding(
+              padding: const EdgeInsets.only(right: 10.0),
+              child: CircleAvatar(
+                  backgroundImage: NetworkImage(
+                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRz0MILLE1kA41DptTXN0bsqcGtkRnewFQk6A&usqp=CAU')),
+            ),
           )
         ],
       ),

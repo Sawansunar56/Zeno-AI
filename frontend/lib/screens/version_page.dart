@@ -2,13 +2,15 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/colors.dart';
+import 'package:frontend/screens/example_typing.dart';
 import 'package:http/http.dart' as http;
 
 class VersionPage extends StatelessWidget {
   const VersionPage({super.key});
   funcbabay() async {
     final response = await http.post(
-      Uri.parse('https://960f-14-139-209-82.ngrok-free.app/ai'),
+      Uri.parse(
+          'https://c6c0-2409-40e6-d-c65-c86f-cda0-74b4-5f26.ngrok-free.app/ai'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -50,7 +52,7 @@ class VersionPage extends StatelessWidget {
               height: 10,
             ),
             Text(
-              "ZENO V 1.1",
+              "ZENO v 1.1",
               style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 10),
@@ -64,7 +66,8 @@ class VersionPage extends StatelessWidget {
             Text("Mortaza behesti Al Saeed"),
             ElevatedButton(
                 onPressed: () {
-                  funcbabay();
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => ExampleIsTyping()));
                 },
                 child: Text("Helllo")),
           ],

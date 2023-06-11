@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:frontend/constants/colors.dart';
 import '../services/database_helper.dart';
 
 class ChatlistScreen extends StatefulWidget {
@@ -84,7 +85,7 @@ class _ChatlistScreenState extends State<ChatlistScreen> {
                 padding: const EdgeInsets.only(left: 10.0),
                 child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red.shade400,
+                        backgroundColor: primaryBlue,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0))),
                     onPressed: () {

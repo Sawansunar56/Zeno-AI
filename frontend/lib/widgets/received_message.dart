@@ -19,14 +19,14 @@ class ReceivedMessage extends StatelessWidget {
           alignment: Alignment.center,
           transform: Matrix4.rotationY(math.pi),
           child: CustomPaint(
-            painter: Triangle(Colors.black),
+            painter: Triangle(Colors.grey.shade300),
           ),
         ),
         Flexible(
           child: Container(
             padding: EdgeInsets.all(14),
             decoration: BoxDecoration(
-              color: Colors.black,
+              color: Colors.grey.shade300,
               borderRadius: BorderRadius.only(
                 topRight: Radius.circular(18),
                 bottomLeft: Radius.circular(18),
@@ -36,7 +36,7 @@ class ReceivedMessage extends StatelessWidget {
             child: Text(
               message,
               style: TextStyle(
-                  color: Colors.white, fontFamily: 'Monstserrat', fontSize: 14),
+                  color: Colors.black, fontFamily: 'Monstserrat', fontSize: 14),
             ),
           ),
         ),

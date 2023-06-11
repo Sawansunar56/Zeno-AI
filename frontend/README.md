@@ -14,3 +14,17 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+
+TODO:
+
+Commands 
+- !Timetable: What is next for my class?
+- !TimetableAll: All day Class
+- !help: List of commands
+- !read: Read out loud the last message
+- !summarize: Text Summarization
+
+Tabs:
+- SetTimer
+- 

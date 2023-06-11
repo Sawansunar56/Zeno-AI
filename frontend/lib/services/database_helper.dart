@@ -70,11 +70,10 @@ class DatabaseHelper {
 
   Future<List<Message>> getMessages(int conversationId) async {
     final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query(
-      'messages',
-      where: 'conversationId = ?',
-      whereArgs: [conversationId],
-    );
+    final List<Map<String, dynamic>> maps = await db.query('messages',
+        where: 'conversationId = ?',
+        whereArgs: [conversationId],
+        orderBy: 'timestamp');
     return List.generate(maps.length, (i) {
       return Message(
         id: maps[i]['id'],

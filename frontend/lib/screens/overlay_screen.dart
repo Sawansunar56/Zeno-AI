@@ -49,7 +49,7 @@ class _OverlayScreenState extends State<OverlayScreen> {
         elevation: 0,
         foregroundColor: Colors.black,
         backgroundColor: Colors.white,
-        title: Text("Get back"),
+        title: Text("Say Something"),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -58,29 +58,49 @@ class _OverlayScreenState extends State<OverlayScreen> {
         ),
       ),
       body: Center(
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          AvatarGlow(
-            animate: isListening,
-            endRadius: 150,
-            glowColor: Colors.red.shade700,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: primaryColor,
-                  padding: EdgeInsets.all(40),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(70.0))),
-              onPressed: () {
-                // print(isListening);
-                // print(text);
-                _listen();
-              },
-              child: Icon(
-                isListening ? Icons.mic_none : Icons.mic,
-                size: 50,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: SizedBox(
+                height: 100,
+                child: ListView(
+                  reverse: true,
+                  children: [
+                    Text(
+                      text,
+                      style: TextStyle(
+                        fontSize: 21,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ]),
+            AvatarGlow(
+              animate: isListening,
+              endRadius: 150,
+              glowColor: Colors.blue.shade600,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: primaryBlue,
+                    padding: EdgeInsets.all(40),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(70.0))),
+                onPressed: () {
+                  // print(isListening);
+                  // print(text);
+                  _listen();
+                },
+                child: Icon(
+                  isListening ? Icons.mic_none : Icons.mic,
+                  size: 50,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
